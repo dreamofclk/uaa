@@ -8,6 +8,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 public final class RandomUtil {
 
     private static final int DEF_COUNT = 20;
+    
+    private static final int SMS_CODE_COUNT = 6;
 
     private RandomUtil() {
     }
@@ -37,5 +39,14 @@ public final class RandomUtil {
      */
     public static String generateResetKey() {
         return RandomStringUtils.randomNumeric(DEF_COUNT);
+    }
+    
+    /**
+     * Generate a sms code.
+     *
+     * @return the generated sms code
+     */
+    public static String generateSmsCode() {
+        return RandomStringUtils.randomNumeric(SMS_CODE_COUNT);
     }
 }

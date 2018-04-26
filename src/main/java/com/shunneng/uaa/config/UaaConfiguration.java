@@ -1,6 +1,8 @@
 package com.shunneng.uaa.config;
 
 import com.shunneng.uaa.security.AuthoritiesConstants;
+import com.shunneng.uaa.security.code.sms.SmsCodeAuthenticationSecurityConfig;
+
 import io.github.jhipster.config.JHipsterProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +61,18 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
 
         private final CorsFilter corsFilter;
 
-        public ResourceServerConfiguration(TokenStore tokenStore, JHipsterProperties jHipsterProperties, CorsFilter corsFilter) {
+        private final SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+        
+        private final ValidateCodeSecurityConfig validateCodeSecurityConfig;
+
+        public ResourceServerConfiguration(TokenStore tokenStore, JHipsterProperties jHipsterProperties, CorsFilter corsFilter,
+        		SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig,
+        		ValidateCodeSecurityConfig validateCodeSecurityConfig) {
             this.tokenStore = tokenStore;
             this.jHipsterProperties = jHipsterProperties;
             this.corsFilter = corsFilter;
+            this.smsCodeAuthenticationSecurityConfig = smsCodeAuthenticationSecurityConfig;
+            this.validateCodeSecurityConfig = validateCodeSecurityConfig;
         }
 
         @Override
@@ -77,6 +87,10 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
                 .headers()
                 .frameOptions()
                 .disable()
+            .and()
+            	.apply(smsCodeAuthenticationSecurityConfig)
+            .and()
+            	.apply(validateCodeSecurityConfig)
             .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
